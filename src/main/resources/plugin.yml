@@ -1,0 +1,6 @@
+main: mundotv.playerconfig.PluginMain
+name: PlayerConfig
+version: 1.0
+author: mundotv789123
+commands:
+  teste:
