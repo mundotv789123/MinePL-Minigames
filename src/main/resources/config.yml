@@ -1,3 +1,34 @@
 espectador_quando_morrer: true
 maximo_vida: 6
 saturacao: true
+
+sniper:
+  items:
+    - id: ''
+      data: ''
+      amount: 1
+  portal:
+    - x: 5
+      y: -60
+      z: 29
+    - x: 4
+      y: -60
+      z: 29
+    - x: 3
+      y: -60
+      z: 29
+  spawn:
+    x: 0
+    y: 100
+    z: 0
+    yaw: 0
+    pitch: 0
+  sniper_spawn:
+    x: 0
+    y: 100
+    z: 0
+    yaw: 0
+    pitch: 0
+
+randomblocks:
+  timer: 5
