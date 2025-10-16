@@ -2,6 +2,7 @@ package mundotv.playerconfig.services;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -62,7 +63,7 @@ public class SniperConfig implements Listener, CommandExecutor {
             if (args[0].equalsIgnoreCase("set_spawn")) {
                 plugin.getConfig().set("sniper.spawn", location);
                 plugin.saveConfig();
-                spawn=location;
+                spawn = location;
                 sender.sendMessage("Spawn setado");
                 return true;
             }
@@ -70,7 +71,7 @@ public class SniperConfig implements Listener, CommandExecutor {
             if (args[0].equalsIgnoreCase("set_sniper_spawn")) {
                 plugin.getConfig().set("sniper.sniper_spawn", location);
                 plugin.saveConfig();
-                sniper_spawn=location;
+                sniper_spawn = location;
                 sender.sendMessage("Spawn sniper setado");
                 return true;
             }
@@ -122,7 +123,7 @@ public class SniperConfig implements Listener, CommandExecutor {
             sniper.getInventory().clear();
             sniper.getInventory().setArmorContents(null);
             sniper.teleport(spawn);
-            sniper.sendTitle("Você não agora é mais o sniper", "", 10, 20, 10);
+            sniper.sendTitle("", "§cVocê não agora é mais o sniper", 10, 20, 10);
         }
 
         sniper = player;
@@ -131,7 +132,15 @@ public class SniperConfig implements Listener, CommandExecutor {
         sniper.getInventory().setArmorContents(null);
         sniper.getInventory().addItem(sniperItems.toArray(new ItemStack[0]));
         sniper.teleport(sniper_spawn);
-        player.sendTitle("Você agora é o sniper", "", 10, 20, 10);
+        player.sendTitle("", "§aVocê agora é o sniper", 10, 20, 10);
+
+        for (var p : Bukkit.getOnlinePlayers()) {
+            if (!p.getGameMode().equals(GameMode.SURVIVAL) || p == sniper) {
+                continue;
+            }
+            p.teleport(spawn);
+            p.sendTitle("", "§eO jogador " + sniper.getName() + " é o novo sniper", 10, 20, 10);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -11,6 +11,7 @@ public class PluginMain extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
         RandomBlocksConfig randomBlocksConfig = new RandomBlocksConfig(this);
         SniperConfig sniperConfig = new SniperConfig(this);
         PlayerConfig playerConfig = new PlayerConfig(this, sniperConfig);
@@ -20,7 +21,6 @@ public class PluginMain extends JavaPlugin {
 
         Bukkit.getPluginCommand("sniper").setExecutor(sniperConfig);
         Bukkit.getPluginCommand("randomblocks").setExecutor(randomBlocksConfig);
-        this.saveDefaultConfig();
 
         Bukkit.getConsoleSender().sendMessage("Plugin PlayerConfig iniciando com sucesso!!");
     }
