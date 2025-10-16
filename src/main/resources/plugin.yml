@@ -2,11 +2,14 @@ main: mundotv.playerconfig.PluginMain
 name: PlayerConfig
 version: 1.0
 author: mundotv789123
-api: 1.19
+api: 1.20.1
 commands:
   sniper:
     description: Ativa ou desativa o modo sniper
     usage: /<command> toggle|set_spawn|set_sniper_spawn|set_portal
   randomblocks:
     description: Ativa ou desativa o modo random blocks
+    usage: /<command>
+  reload:
+    description: Recarrega as configurações do plugin
     usage: /<command>

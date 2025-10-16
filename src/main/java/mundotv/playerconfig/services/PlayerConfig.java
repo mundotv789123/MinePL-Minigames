@@ -59,6 +59,8 @@ public class PlayerConfig implements Listener {
                 var effect = new PotionEffect(PotionEffectType.SATURATION, -1, 10, false, false, false);
                 player.addPotionEffect(effect);
             }
+        } else if (player.getPotionEffect(PotionEffectType.SATURATION) == null) {
+            player.removePotionEffect(PotionEffectType.SATURATION);
         }
     }
 }

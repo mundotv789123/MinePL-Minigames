@@ -1,5 +1,7 @@
 package mundotv.playerconfig.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -14,9 +16,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class RandomBlocksConfig implements CommandExecutor {
     private final JavaPlugin plugin;
     private Integer schedulerId;
+    private final List<String> blacklist; 
+    private final List<Material> materials;
 
     public RandomBlocksConfig(JavaPlugin plugin) {
         this.plugin = plugin;
+        this.blacklist = plugin.getConfig().getStringList("randomblocks.blacklist");
+        this.materials = Arrays.stream(Material.values()).filter(v -> !blacklist.contains(v.name())).toList();
     }
 
     @Override
@@ -37,8 +43,7 @@ public class RandomBlocksConfig implements CommandExecutor {
                 if (player.getInventory().firstEmpty() == -1) {
                     continue;
                 }
-                var materials = Material.values();
-                var item = new ItemStack(materials[random.nextInt(materials.length)]);
+                var item = new ItemStack(materials.get(random.nextInt(materials.size())));
                 player.getInventory().addItem(item);
             }
         }, 0, 20 * plugin.getConfig().getInt("randomblocks.timer", 5));

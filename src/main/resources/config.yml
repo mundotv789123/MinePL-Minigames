@@ -32,3 +32,15 @@ sniper:
 
 randomblocks:
   timer: 5
+  blacklist: [
+    'BEDROCK',
+    'BARRIER',
+    'COMMAND_BLOCK',
+    'STRUCTURE_BLOCK',
+    'JIGSAW',
+    'END_PORTAL',
+    'END_PORTAL_FRAME',
+    'NETHER_PORTAL',
+    'SPAWNER',
+    'LIGHT'
+  ]
