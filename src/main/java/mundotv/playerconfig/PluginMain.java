@@ -12,12 +12,12 @@ import mundotv.playerconfig.services.RandomBlocksConfig;
 import mundotv.playerconfig.services.SniperConfig;
 
 public class PluginMain extends JavaPlugin {
+    private final RandomBlocksConfig randomBlocksConfig = new RandomBlocksConfig(this);
+    private final SniperConfig sniperConfig = new SniperConfig(this);
+    private final PlayerConfig playerConfig = new PlayerConfig(this, sniperConfig);
+
     @Override
     public void onEnable() {
-        var playerConfig = new PlayerConfig(this);
-        var randomBlocksConfig = new RandomBlocksConfig(this);
-        var sniperConfig = new SniperConfig(this);
-
         Bukkit.getPluginManager().registerEvents(playerConfig, this);
         Bukkit.getPluginManager().registerEvents(sniperConfig, this);
 
@@ -42,6 +42,7 @@ public class PluginMain extends JavaPlugin {
                 }
             }
         }
+        sniperConfig.loadConfig();
         return true;
     }
 }

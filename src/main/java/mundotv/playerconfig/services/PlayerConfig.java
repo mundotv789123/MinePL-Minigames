@@ -15,16 +15,18 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PlayerConfig implements Listener {
     private final JavaPlugin plugin;
+    private final SniperConfig sniperConfig;
 
-    public PlayerConfig(JavaPlugin plugin) {
+    public PlayerConfig(JavaPlugin plugin, SniperConfig sniperConfig) {
         this.plugin = plugin;
+        this.sniperConfig = sniperConfig;
     }
 
     @EventHandler
     public void onPlayerRespawnEvent(PlayerRespawnEvent e) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             var player = e.getPlayer();
-            if (plugin.getConfig().getBoolean("espectador_quando_morrer", true)) {
+            if (plugin.getConfig().getBoolean("espectador_quando_morrer", true) && !sniperConfig.isEnabled()) {
                 player.setGameMode(GameMode.SPECTATOR);
             } else {
                 loadPlayerConfig(e.getPlayer());

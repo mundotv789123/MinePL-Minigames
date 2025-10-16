@@ -6,7 +6,7 @@ api: 1.20.1
 commands:
   sniper:
     description: Ativa ou desativa o modo sniper
-    usage: /<command> toggle|set_spawn|set_sniper_spawn|set_portal
+    usage: /<command> [toggle|set_spawn|set_sniper_spawn|set_portal]
   randomblocks:
     description: Ativa ou desativa o modo random blocks
     usage: /<command>

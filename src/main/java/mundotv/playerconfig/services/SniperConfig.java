@@ -1,11 +1,10 @@
 package mundotv.playerconfig.services;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,15 +22,20 @@ public class SniperConfig implements Listener, CommandExecutor {
     private boolean enabled = false;
     private Player sniper = null;
 
-    private final List<Map<String, Integer>> portal;
-    private final List<ItemStack> sniperItems;
-    private final Location spawn;
-    private final Location sniper_spawn;
+    private Material portalBlock;
+    private List<ItemStack> sniperItems;
+    private Location spawn;
+    private Location sniper_spawn;
 
     public SniperConfig(JavaPlugin plugin) {
         this.plugin = plugin;
-        portal = (List<Map<String, Integer>>) plugin.getConfig().getList("sniper.portal", List.of());
-        sniperItems = (List<ItemStack>) plugin.getConfig().getList("sniper.items", List.of());
+    }
+
+    public void loadConfig() {
+        portalBlock = Material
+                .valueOf(plugin.getConfig().getString("sniper.portal.block", Material.WHITE_TERRACOTTA.name()));
+        sniperItems = (List<ItemStack>) plugin.getConfig().getList("sniper.items", List.of()).stream()
+                .filter(v -> v instanceof ItemStack).map(v -> (ItemStack) v).toList();
         spawn = plugin.getConfig().getLocation("sniper.spawn");
         sniper_spawn = plugin.getConfig().getLocation("sniper.sniper_spawn");
     }
@@ -73,7 +77,7 @@ public class SniperConfig implements Listener, CommandExecutor {
             }
 
             var itemInHand = player.getInventory().getItemInMainHand();
-            if (itemInHand.getType() != null && !itemInHand.getType().isAir()) {
+            if (itemInHand != null) {
                 if (args[0].equalsIgnoreCase("add_sniper_item")) {
                     sniperItems.add(itemInHand.clone());
                     plugin.getConfig().set("sniper.items", sniperItems);
@@ -106,13 +110,7 @@ public class SniperConfig implements Listener, CommandExecutor {
         }
 
         var playerLocation = player.getLocation();
-        Optional<Map<String, Integer>> portalFilter = portal.stream()
-                .filter(location -> location.get("x") == playerLocation.getBlockX() &&
-                        location.get("y") == playerLocation.getBlockY() &&
-                        location.get("z") == playerLocation.getBlockZ())
-                .findFirst();
-
-        if (portalFilter.isEmpty()) {
+        if (playerLocation.getBlock().getType() != portalBlock) {
             return;
         }
 
@@ -143,5 +141,9 @@ public class SniperConfig implements Listener, CommandExecutor {
         }
         var player = e.getPlayer();
         player.teleport(spawn);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }
