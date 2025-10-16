@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,20 +23,16 @@ public class SniperConfig implements Listener, CommandExecutor {
     private boolean enabled = false;
     private Player sniper = null;
 
-    private Material portalBlock;
-    private List<ItemStack> sniperItems;
+    private final Material portalBlock;
+    private final List<ItemStack> sniperItems;
     private Location spawn;
     private Location sniper_spawn;
 
     public SniperConfig(JavaPlugin plugin) {
         this.plugin = plugin;
-    }
-
-    public void loadConfig() {
         portalBlock = Material
                 .valueOf(plugin.getConfig().getString("sniper.portal.block", Material.WHITE_TERRACOTTA.name()));
-        sniperItems = (List<ItemStack>) plugin.getConfig().getList("sniper.items", List.of()).stream()
-                .filter(v -> v instanceof ItemStack).map(v -> (ItemStack) v).toList();
+        sniperItems = (List<ItemStack>) plugin.getConfig().getList("sniper.items", List.of());
         spawn = plugin.getConfig().getLocation("sniper.spawn");
         sniper_spawn = plugin.getConfig().getLocation("sniper.sniper_spawn");
     }
@@ -60,11 +57,12 @@ public class SniperConfig implements Listener, CommandExecutor {
         }
 
         if (sender instanceof Player player) {
-            Location location = player.getLocation();
+            Location location = player.getLocation().clone();
 
             if (args[0].equalsIgnoreCase("set_spawn")) {
                 plugin.getConfig().set("sniper.spawn", location);
                 plugin.saveConfig();
+                spawn=location;
                 sender.sendMessage("Spawn setado");
                 return true;
             }
@@ -72,6 +70,7 @@ public class SniperConfig implements Listener, CommandExecutor {
             if (args[0].equalsIgnoreCase("set_sniper_spawn")) {
                 plugin.getConfig().set("sniper.sniper_spawn", location);
                 plugin.saveConfig();
+                sniper_spawn=location;
                 sender.sendMessage("Spawn sniper setado");
                 return true;
             }
@@ -109,13 +108,14 @@ public class SniperConfig implements Listener, CommandExecutor {
             return;
         }
 
-        var playerLocation = player.getLocation();
+        var playerLocation = player.getLocation().add(0, -1, 0);
         if (playerLocation.getBlock().getType() != portalBlock) {
             return;
         }
 
         if (sniper != null) {
             if (sniper == player) {
+                sniper.teleport(sniper_spawn);
                 return;
             }
 
@@ -139,8 +139,25 @@ public class SniperConfig implements Listener, CommandExecutor {
         if (!enabled) {
             return;
         }
-        var player = e.getPlayer();
-        player.teleport(spawn);
+        if (sniper == e.getPlayer()) {
+            e.setRespawnLocation(sniper_spawn);
+            return;
+        }
+        e.setRespawnLocation(spawn);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
+        if (!enabled) {
+            return;
+        }
+        if (!(e.getEntity() instanceof Player player)) {
+            return;
+        }
+        if (player == sniper) {
+            e.setCancelled(true);
+            return;
+        }
     }
 
     public boolean isEnabled() {
