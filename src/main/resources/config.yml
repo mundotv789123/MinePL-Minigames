@@ -4,23 +4,10 @@ saturacao: true
 
 sniper:
   items:
-    - id: ''
-      data: ''
-      amount: 1
   portal:
     block: 'WHITE_TERRACOTTA'
   spawn:
-    x: 0
-    y: 100
-    z: 0
-    yaw: 0
-    pitch: 0
   sniper_spawn:
-    x: 0
-    y: 100
-    z: 0
-    yaw: 0
-    pitch: 0
 
 randomblocks:
   timer: 5

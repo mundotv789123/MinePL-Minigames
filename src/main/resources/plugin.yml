@@ -10,3 +10,6 @@ commands:
   randomblocks:
     description: Ativa ou desativa o modo random blocks
     usage: /<command>
+  config:
+    description: Gerencia as configurações do jogador
+    usage: /<command> [set_max_health|set_saturation|set_spectator_on_death]

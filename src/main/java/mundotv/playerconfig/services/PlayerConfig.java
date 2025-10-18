@@ -3,6 +3,9 @@ package mundotv.playerconfig.services;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PlayerConfig implements Listener {
+public class PlayerConfig implements Listener, CommandExecutor {
     private final JavaPlugin plugin;
     private final SniperConfig sniperConfig;
 
@@ -31,7 +34,7 @@ public class PlayerConfig implements Listener {
             } else {
                 loadPlayerConfig(e.getPlayer());
             }
-        }, 5);
+        }, 1);
     }
 
     @EventHandler
@@ -46,6 +49,50 @@ public class PlayerConfig implements Listener {
         if (e.getNewGameMode() == GameMode.SURVIVAL) {
             loadPlayerConfig(e.getPlayer());
         }
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length != 2) {
+            sender.sendMessage(command.getUsage());
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("set_max_health")) {
+            try {
+                var max_health = Integer.parseInt(args[1]);
+                plugin.getConfig().set("maximo_vida", max_health);
+                plugin.saveConfig();
+                sender.sendMessage("Configuração 'maximo_vida' definida para " + max_health);
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    loadPlayerConfig(player);
+                });
+            } catch (NumberFormatException e) {
+                sender.sendMessage("Valor inválido para 'maximo_vida'");
+            }
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("set_saturation")) {
+            var saturation = Boolean.parseBoolean(args[1]);
+            plugin.getConfig().set("saturacao", saturation);
+            plugin.saveConfig();
+            sender.sendMessage("Configuração 'saturacao' definida para " + saturation);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                loadPlayerConfig(player);
+            });
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("set_spectator_on_death")) {
+            var spectatorOnDeath = Boolean.parseBoolean(args[1]);
+            plugin.getConfig().set("espectador_quando_morrer", spectatorOnDeath);
+            plugin.saveConfig();
+            sender.sendMessage("Configuração 'espectador_quando_morrer' definida para " + spectatorOnDeath);
+            return true;
+        }
+
+        return true;
     }
 
     public void loadPlayerConfig(Player player) {

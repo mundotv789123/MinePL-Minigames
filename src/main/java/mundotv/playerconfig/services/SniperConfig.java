@@ -29,6 +29,7 @@ public class SniperConfig implements Listener, CommandExecutor {
     private Location spawn;
     private Location sniper_spawn;
 
+    @SuppressWarnings("unchecked")
     public SniperConfig(JavaPlugin plugin) {
         this.plugin = plugin;
         portalBlock = Material

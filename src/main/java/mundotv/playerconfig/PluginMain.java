@@ -21,6 +21,7 @@ public class PluginMain extends JavaPlugin {
 
         Bukkit.getPluginCommand("sniper").setExecutor(sniperConfig);
         Bukkit.getPluginCommand("randomblocks").setExecutor(randomBlocksConfig);
+        Bukkit.getPluginCommand("config").setExecutor(playerConfig);
 
         Bukkit.getConsoleSender().sendMessage("Plugin PlayerConfig iniciando com sucesso!!");
     }
