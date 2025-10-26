@@ -9,7 +9,6 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -116,12 +115,11 @@ public class TntConfig implements Listener {
             event.setCancelled(true);
             return;
         }
-        for (Block affected : event.blockList()) {
-            if (affected.getType() == Material.DISPENSER || affected.getType() == Material.STONE_BUTTON
-                    || affected.getType() == Material.OAK_BUTTON) {
-                event.blockList().remove(affected);
-            }
-        }
+        event.blockList().removeIf(affected -> {
+            return affected.getType() == Material.DISPENSER ||
+                    affected.getType() == Material.STONE_BUTTON ||
+                    affected.getType() == Material.OAK_BUTTON;
+        });
     }
 
     @EventHandler
