@@ -46,12 +46,20 @@ public class TntConfig implements Listener {
             var block = event.getBlock();
             var world = block.getLocation().getWorld();
             var entities = world.getNearbyEntities(block.getLocation(), 1.5, 1.5, 1.5,
-                    (entity) -> entity instanceof TNTPrimed);
+                    (entity) -> entity instanceof TNTPrimed)
+                    .stream()
+                    .filter(entity -> entity != tntEntity)
+                    .toList();
 
             if (entities.isEmpty()) {
                 return;
             }
             Random random = new Random();
+
+            if (this.tntEntity != null) {
+                this.tntEntity.remove();
+                resetTnt();
+            }
 
             this.tntEntity = (TNTPrimed) entities.iterator().next();
             this.tntEntity.setFuseTicks(random.nextInt(200) + 200);
