@@ -26,6 +26,6 @@ public class PluginMain extends JavaPlugin {
         Bukkit.getPluginCommand("randomblocks").setExecutor(randomBlocksConfig);
         Bukkit.getPluginCommand("config").setExecutor(playerConfig);
 
-        Bukkit.getConsoleSender().sendMessage("Plugin PlayerConfig iniciando com sucesso!!");
+        Bukkit.getConsoleSender().sendMessage("§aPlugin PlayerConfig iniciando com sucesso!");
     }
 }
