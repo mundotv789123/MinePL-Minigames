@@ -1,4 +1,4 @@
-package mundotv.playerconfig.services;
+package mundotv.playerconfig.config;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class RandomBlocksConfig implements CommandExecutor {
     private final JavaPlugin plugin;
     private Integer schedulerId;
-    private final List<String> blacklist; 
+    private final List<String> blacklist;
     private final List<Material> materials;
 
     public RandomBlocksConfig(JavaPlugin plugin) {

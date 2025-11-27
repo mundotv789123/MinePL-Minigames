@@ -1,14 +1,14 @@
-package mundotv.playerconfig.services;
+package mundotv.playerconfig.listeners;
 
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.Material;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -17,17 +17,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class TntConfig implements Listener {
+import mundotv.playerconfig.config.TntConfig;
+
+public class TntListener implements Listener {
 
     private final JavaPlugin plugin;
+    private final TntConfig config;
 
     private TNTPrimed tntEntity = null;
     private Player playerTnt = null;
 
-    private boolean enabled = true;
-
-    public TntConfig(JavaPlugin plugin) {
+    public TntListener(JavaPlugin plugin, TntConfig config) {
         this.plugin = plugin;
+        this.config = config;
     }
 
     private void resetTnt() {
@@ -37,7 +39,7 @@ public class TntConfig implements Listener {
 
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent event) {
-        if (!enabled || event.getItem() == null || event.getItem().getType() != Material.TNT) {
+        if (!config.isEnabled() || event.getItem() == null || event.getItem().getType() != Material.TNT) {
             return;
         }
 
@@ -108,7 +110,7 @@ public class TntConfig implements Listener {
 
     @EventHandler
     public void onBlockExplode(EntityExplodeEvent event) {
-        if (!enabled || event.getEntity().getType() != EntityType.TNT || event.getEntity() != tntEntity) {
+        if (!config.isEnabled() || event.getEntity().getType() != EntityType.TNT || event.getEntity() != tntEntity) {
             return;
         }
         if (playerTnt == null) {
@@ -124,7 +126,7 @@ public class TntConfig implements Listener {
 
     @EventHandler
     void onPlayerMoveEvent(PlayerMoveEvent e) {
-        if (!enabled || tntEntity == null) {
+        if (!config.isEnabled() || tntEntity == null) {
             return;
         }
         var player = e.getPlayer();
@@ -135,7 +137,7 @@ public class TntConfig implements Listener {
 
     @EventHandler
     void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
-        if (!enabled) {
+        if (!config.isEnabled()) {
             return;
         }
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof Player damager) {
