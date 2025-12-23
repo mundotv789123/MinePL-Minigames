@@ -63,7 +63,7 @@ public class PlayerConfig implements CommandExecutor {
 
     public void loadPlayerConfig(Player player) {
         var max_health = plugin.getConfig().getInt("maximo_vida", 6);
-        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(max_health);
+        player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(max_health);
         if (player.getHealth() > max_health) {
             player.setHealth(max_health);
         }

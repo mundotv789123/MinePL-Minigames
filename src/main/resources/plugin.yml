@@ -13,3 +13,6 @@ commands:
   config:
     description: Gerencia as configurações do jogador
     usage: /<command> [set_max_health|set_saturation|set_spectator_on_death]
+  tnt:
+    description: Gerencia as configurações de TNT
+    usage: /<command> [enable|disable|set_fuse_time]
